@@ -76,8 +76,6 @@ Usuário: admin@admin.com password: 123456 authorise: admin, user
 Usuário: user1@user.com password: 123456 authorise: admin
 Usuário: user2@user.com password: 123456 authorise: user
 
-Postman
-
 Swagger
 
 Para usar é preciso se autenticar através do botaão "Authorize" no canto superior direito e deve escolhe o tipo de recurso que vai usar "read" ou "write".
