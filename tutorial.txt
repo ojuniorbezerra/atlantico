@@ -1,0 +1,42 @@
+---------------------Redis ---------
+docker pull redis:6.0.6
+docker run -d --name redis -p 6379:6379 -it --net redisnet redis:6.0.6
+docker exec -it "nome-container" redis-cli
+---------------------------- NETWORK -------------------------
+docker network create redisnet
+
+---------------------RABITTMQ---------
+mkdir -p \docker\rabbitmq\data
+pull rabbitmq:3-management
+docker volume create rebbitmq
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 --restart=always --hostname rabbitmq-master -v rabbitmq:/var/lib/rabbitmq rabbitmq:3-management
+Obs:Pode acessar em http://localhost:15672
+user: guest
+senha: guest
+
+------------------------WEB --------------- 
+docker build -t atlantico-web:dev .
+docker run -p 4200:4200 atlantico-web:dev
+
+
+----------------------- AUTH -----------------
+git clone https://github.com/ojuniorbezerra/atlantico-auth.git
+mvn clean install
+docker build -t atlantico-auth:dev .
+docker run -p 8080:8080 atlantico-auth:dev
+
+
+----------------------- API ------------------
+git clone https://github.com/ojuniorbezerra/atlantico-api.git
+mvn clean install
+docker build -t atlantico-api:dev .
+docker run --name atlantico-api -d -p 8080:8080 --net redisnet -it  atlantico-api:dev
+
+
+----------------------- EMAIL ------------------
+git clone https://github.com/ojuniorbezerra/atlantico-email.git
+mvn clean install
+docker build -t atlantico-email:dev .
+docker run --name atlantico-email -d -p 8083:8083 --net redisnet -it atlantico-email:dev
+
+

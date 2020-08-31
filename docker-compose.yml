@@ -1,0 +1,115 @@
+version: '3.8'
+services:
+  redis:
+    image: "redis:6.0.6"
+    container_name: redis
+    ports:
+      - 6379:6379
+    expose:
+      - "5672"
+    networks:
+      - app-atlantico
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq
+    hostname: rabbitmq-master
+    ports:
+      - 5672:5672
+      - 15672:15672
+    expose:
+      - "15672"
+    networks:
+      - app-atlantico
+  atlantico-server:
+    build: 
+      context: ./atlantico-server
+      dockerfile: Dockerfile
+    image: atlantico-server
+    hostname: atlantico-server
+    container_name: atlantico-server
+    ports:
+      - 9090:9090
+    expose:
+      - "9090"
+    networks:
+      - app-atlantico
+  atlantico-eureka:
+    build: 
+      context: ./atlantico-eureka
+      dockerfile: Dockerfile
+    image: atlantico-eureka
+    restart: on-failure
+    container_name: atlantico-eureka
+    depends_on:
+      - atlantico-server
+    ports:
+      - 9091:9091
+      - 8761:8761
+    expose:
+      - "8761"
+      - "9091"
+    networks:
+      - app-atlantico
+    environment:
+      spring.cloud.config.uri: http://atlantico-server:9090
+      server.port: 9091
+      eureka.client.enabled: 'true'
+      eureka.host: eureka-eureka
+      eureka.instance.preferIpAddress: 'true'
+  atlantico-email:
+    build: 
+      context: ./atlantico-email
+      dockerfile: Dockerfile
+    image: atlantico-email
+    restart: on-failure
+    container_name: atlantico-email
+    ports:
+      - 9093:9093
+    networks:
+      - app-atlantico
+    environment:
+      spring.cloud.config.uri: http://atlantico-server:9090
+      server.port: 9091
+      eureka.client.enabled: 'true'
+      eureka.host: eureka-eureka
+      eureka.instance.preferIpAddress: 'true'
+  atlantico-api:
+    build: 
+      context: ./atlantico-api
+      dockerfile: Dockerfile
+    image: atlantico-api
+    restart: on-failure
+    container_name: atlantico-api
+    depends_on:
+      - atlantico-server
+    ports:
+      - 9094:9094
+    networks:
+      - app-atlantico
+    environment:
+      spring.profiles.active: prod
+      spring.redis.host: redis
+      eureka.instance.hostname: atlantico-eureka
+      spring.cloud.config.uri: http://atlantico-server:9090
+      server.port: 9091
+      eureka.client.enabled: 'true'
+      eureka.host: eureka-eureka
+      eureka.instance.preferIpAddress: 'true'
+      WAIT_HOSTS: atlantico-server:9090
+  atlantico-web:
+    build:
+      context: ./atlantico-web
+      dockerfile: Dockerfile
+    image: atlantico-web
+    restart: on-failure
+    container_name: atlantico-web
+    ports:
+      - 4200:4200
+    expose:
+      - "4200"
+
+    networks:
+      - app-atlantico
+networks:
+  app-atlantico:
+    driver: bridge

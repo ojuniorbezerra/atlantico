@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS user (
+  username VARCHAR(50) NOT NULL PRIMARY KEY,
+  email VARCHAR(50),
+  password VARCHAR(500),
+  activated BOOLEAN DEFAULT FALSE,
+  activationkey VARCHAR(50) DEFAULT NULL,
+  resetpasswordkey VARCHAR(50) DEFAULT NULL
+);
