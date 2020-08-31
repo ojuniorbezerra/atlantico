@@ -29,9 +29,10 @@ password: guest
 
 # Redis
 Caso queira ver as chaves
+```redis
 docker exec -it "nome-container" redis-cli
 KEYS *
-
+```
 
 # atlantico-server
 Servidor de configuração usando eureka
