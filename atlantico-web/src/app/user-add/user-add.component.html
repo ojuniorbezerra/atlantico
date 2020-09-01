@@ -1,0 +1,29 @@
+<div class="col-md-6 user-container">
+  <h2 class="text-center">Add User</h2>
+  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">User Name:</label>
+      <input type="text" formControlName="username" placeholder="username" name="username" class="form-control" id="username">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input formControlName="email" placeholder="Email" name="email" class="form-control" id="email">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" formControlName="password" placeholder="Password" name="password" class="form-control" id="password">
+    </div>
+
+    <div class="form-group">
+      <label for="authorities">Authority:</label>
+            
+      <select formControlName="authorities">
+        <option *ngFor="let c of authorities" [value]="c">{{c}}</option>
+      </select>
+    </div>
+
+    <button class="btn btn-success">Create</button>
+  </form>
+</div>
