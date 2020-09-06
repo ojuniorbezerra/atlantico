@@ -1,4 +1,4 @@
-package com.atlantico.auth.domain;
+package com.atlantico.auth.model.enuns;
 
 public enum Authorities {
 
@@ -13,4 +13,5 @@ public enum Authorities {
     	
     	return names;
     }
+
 }

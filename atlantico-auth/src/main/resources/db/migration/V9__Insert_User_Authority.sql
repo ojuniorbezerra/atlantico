@@ -1,24 +1,18 @@
-INSERT INTO user_authority (username, authority)
-SELECT * FROM (SELECT 'user1', 'ROLE_USER') AS tmp
+INSERT INTO user_authority (email, authority)
+SELECT * FROM (SELECT 'user1@user.com', 'ROLE_USER') AS tmp
 WHERE NOT EXISTS (
-    SELECT username, authority FROM user_authority WHERE username = 'user1' and authority = 'ROLE_USER'
+    SELECT email, authority FROM user_authority WHERE email = 'user1@user.com' and authority = 'ROLE_USER'
 ) LIMIT 1;
 
 
-INSERT INTO user_authority (username, authority)
-SELECT * FROM (SELECT 'user2', 'ROLE_ADMIN') AS tmp
+INSERT INTO user_authority (email, authority)
+SELECT * FROM (SELECT 'user2@user.com', 'ROLE_ADMIN') AS tmp
 WHERE NOT EXISTS (
-    SELECT username, authority FROM user_authority WHERE username = 'user2' and authority = 'ROLE_ADMIN'
+    SELECT email, authority FROM user_authority WHERE email = 'user2@user.com' and authority = 'ROLE_ADMIN'
 ) LIMIT 1;
 
-INSERT INTO user_authority (username, authority)
-SELECT * FROM (SELECT 'admin', 'ROLE_USER') AS tmp
+INSERT INTO user_authority (email, authority)
+SELECT * FROM (SELECT 'admin@admin.com', 'ROLE_ADMIN') AS tmp
 WHERE NOT EXISTS (
-    SELECT username, authority FROM user_authority WHERE username = 'admin' and authority = 'ROLE_USER'
-) LIMIT 1;
-
-INSERT INTO user_authority (username, authority)
-SELECT * FROM (SELECT 'admin', 'ROLE_ADMIN') AS tmp
-WHERE NOT EXISTS (
-    SELECT username, authority FROM user_authority WHERE username = 'admin' and authority = 'ROLE_ADMIN'
+    SELECT email, authority FROM user_authority WHERE email = 'admin@admin.com' and authority = 'ROLE_ADMIN'
 ) LIMIT 1;

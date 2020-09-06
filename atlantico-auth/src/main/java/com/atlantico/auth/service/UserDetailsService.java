@@ -1,8 +1,7 @@
-package com.atlantico.auth.servece;
+package com.atlantico.auth.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -17,17 +16,18 @@ import com.atlantico.auth.model.Authority;
 import com.atlantico.auth.model.User;
 import com.atlantico.auth.repository.UserRepository;
 
+
 @Service
 @Transactional
-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService{
+public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 	
 	UserRepository userRepository;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findByUsername(username)
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		return userRepository.findByEmail(email)
 								.map(user -> new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getGrantedAuthorities(user)))
-								.orElseThrow(() -> new UsernameNotFoundException("User "+username+" Not found"));
+								.orElseThrow(() -> new UsernameNotFoundException("User "+email+" Not found"));
 	}
 
 	@Autowired
@@ -36,12 +36,13 @@ public class UserDetailsService implements org.springframework.security.core.use
 	}
 	
 	private Collection<GrantedAuthority> getGrantedAuthorities(User user){
-    	Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+    	Collection<GrantedAuthority> grantedAuthorities = new ArrayList();
         for (Authority authority : user.getAuthorities()) {
-            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
+            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName().name());
             grantedAuthorities.add(grantedAuthority);
         }
         
         return grantedAuthorities;
     }
+	
 }

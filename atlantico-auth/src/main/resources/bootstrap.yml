@@ -1,6 +1,6 @@
 spring:
   application:
-    name: atlantico-auth-server
+    name: atlantico-eureka-server
   cloud:
     config:
       uri: http://localhost:9090

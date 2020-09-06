@@ -1,37 +1,64 @@
 package com.atlantico.auth.model;
 
-
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@Table(name = "user")
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(updatable = false, nullable = false)
+	private static final long serialVersionUID = 3192721352579520261L;
+    
+    @Column(nullable = false)
     private String username;
-
-    @Size(min = 0, max = 500)
-    private String password;
-
+    
+    @Id
     @Email
     @Size(min = 0, max = 50)
     private String email;
+    
+    @JsonIgnore
+    @Size(min = 0, max = 500)
+    private String password;
+    
+    @Column(nullable = false, name = "created_date")
+    private Date createdDate = new Date();
+    
+    @Column(name = "updated_date")
+    private Date updatedDate;
 
-    private boolean activated;
-
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = @JoinColumn(name = "email"),
+            inverseJoinColumns = @JoinColumn(name = "authority"))
+    private Set<Authority> authorities;
+    
     @Size(min = 0, max = 100)
     @Column(name = "activationkey")
     private String activationKey;
@@ -40,82 +67,28 @@ public class User implements Serializable {
     @Column(name = "resetpasswordkey")
     private String resetPasswordKey;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = @JoinColumn(name = "username"),
-            inverseJoinColumns = @JoinColumn(name = "authority"))
-    private Set<Authority> authorities;
-
     public User() {
     }
 
-    public User(String username, String password, String email,
-                boolean activated, String firstName, String lastName,
-                String activationKey, String resetPasswordKey,
-                Set<Authority> authorities) {
+    public User(String username, String email) {
+        super();
         this.username = username;
-        this.password = password;
         this.email = email;
-        this.activated = activated;
-        this.activationKey = activationKey;
-        this.resetPasswordKey = resetPasswordKey;
-        this.authorities = authorities;
     }
-
-    public String getUsername() {
-        return username;
+    public User(User user) {
+        super();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.authorities = user.getAuthorities();
     }
-
-    public void setUsername(String username) {
+    public User(String username, String email, String password, Set<Authority> authorities) {
+        super();
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+        this.email = email;
+        this.authorities = authorities;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getActivationKey() {
-        return activationKey;
-    }
-
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
-
-    public String getResetPasswordKey() {
-        return resetPasswordKey;
-    }
-
-    public void setResetPasswordKey(String resetPasswordKey) {
-        this.resetPasswordKey = resetPasswordKey;
-    }
-
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
+	
 }

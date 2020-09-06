@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.atlantico</groupId>
-	<artifactId>atlantico</artifactId>
+	<artifactId>atlantico-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>atlantico</name>
+	<name>atlantico-api</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

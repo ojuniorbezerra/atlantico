@@ -6,9 +6,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class DeliveryAuthServerApplication {
+public class AtlanticoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DeliveryAuthServerApplication.class, args);
+		SpringApplication.run(AtlanticoApplication.class, args);
 	}
+
 }

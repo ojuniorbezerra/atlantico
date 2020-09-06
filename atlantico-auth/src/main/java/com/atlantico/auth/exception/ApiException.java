@@ -1,4 +1,4 @@
-package com.atlantico.exception;
+package com.atlantico.auth.exception;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
