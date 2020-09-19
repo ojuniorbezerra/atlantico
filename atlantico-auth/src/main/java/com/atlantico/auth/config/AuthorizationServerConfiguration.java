@@ -62,7 +62,10 @@ AuthorizationServerConfigurerAdapter  {
         .tokenStore(tokenStore);
     }
 
-    
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+      oauthServer.allowFormAuthenticationForClients();
+    }
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients

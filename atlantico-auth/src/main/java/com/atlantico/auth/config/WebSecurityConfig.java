@@ -49,9 +49,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
    public AuthenticationManager authenticationManagerBean() throws Exception {
        return super.authenticationManagerBean();
    }
+   
    @Override
    public void configure(WebSecurity web) throws Exception {
-       web.ignoring().antMatchers("/oauth/register","/swagger-ui.html","/swagger-ui.html**", 
+       web.ignoring().antMatchers("/swagger-ui.html","/swagger-ui.html**",
     		   "/swagger-resources/**", "/v2/**", "/h2", "/h2/**","/actuator",
                "/actuator/**","/**/*.css","/v2/api-docs","/**/*.png","/webjars/**","/configuration/**")
        .antMatchers(HttpMethod.OPTIONS, "*");
@@ -63,7 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
        			.csrf().disable()
                .authorizeRequests()
                .antMatchers("/swagger-ui.html", "/swagger-resources/**").permitAll() 
-               .antMatchers("/v1.0/**").authenticated()
                .and()
                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint)
                .accessDeniedHandler(new CustomAccessDeniedHandler());
